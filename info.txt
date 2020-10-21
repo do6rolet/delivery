@@ -1,0 +1,6 @@
+Проект по созданию магазина на Django + Angular
+
+1. pip install -r requirements.txt
+2. run server:
+cd backend
+./bin/run  # chmod +x ./bin/run

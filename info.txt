@@ -4,3 +4,73 @@
 2. run server:
 cd backend
 ./bin/run  # chmod +x ./bin/run
+
+
+3. для загрузки данных их excel в БД ./manage.py load_from_excel
+
+4. Swagger - для создания API
+https://github.com/axnsan12/drf-yasg
+
+## prj/urls.py
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Delivery API",
+        default_version='v1',
+        description='''
+            Documentation `ReDoc` view can be found [here](/doc)''',
+        contact=openapi.Contact(email="do6rolet@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+
+5. Создание Сериализаторов:
+
+# регистрация общих(generic) путей
+from rest_framework import routers
+from market.views.category import CategoryViewSet  # - generic
+router = routers.DefaultRouter()
+router.register(r'category', CategoryViewSet)
+
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('v1/', include([
+        path('generic/', include(router.urls)),
+        path('market/', include('market.urls'))  # - custom url
+
+    ])),
+
+
+# Custom  - market.urls
+
+from django.urls import path, include
+from market.views.auth import AuthView, hello
+
+
+urlpatterns = [
+    path('userlogin', AuthView.as_view()),
+    path('hello/', hello),
+
+]
+
+
+6. Создание ViewSets
+https://www.django-rest-framework.org/api-guide/viewsets/
+
+7. Channels - накладывает web-socket протокол на http для взаимодействия "клиент - сервер"  и передачи сообщения между
+ними в двухнаправленном потоке
+https://channels.readthedocs.io/en/stable/
+
+8. Настройка вывода продуктов views/product.py
+
+9. Постраничная навигация(DRF pagination), settings.py
+https://www.django-rest-framework.org/api-guide/pagination/

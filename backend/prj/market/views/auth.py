@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 
-from drf_yasg.utils import swagger_auto_schema  # Декоратор
+from drf_yasg.utils import swagger_auto_schema  # Декоратор для включения сериализаторов в наш класс AuthView
 
 
 class CommonResponseSerializer(serializers.Serializer):
@@ -28,7 +28,7 @@ class AuthView(APIView):
         return Response(CommonResponseSerializer({
             'status': 0,
             'message': 'Gooood'
-        }).data)
+        }).data)  # параметр .data преобразует параметры сериализатора в строку
 
 
 

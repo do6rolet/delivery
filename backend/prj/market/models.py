@@ -1,6 +1,11 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
+
+from image_cropping.fields import ImageRatioField, ImageCropField
+from easy_thumbnails.files import get_thumbnailer
+
 
 class Provider(User):
     name = models.CharField(max_length=250, default='')
@@ -31,21 +36,58 @@ class Consumer(User):
 
 class Category(models.Model):
     name = models.CharField(max_length=250, default='')
+    image = models.ImageField(upload_to='category', null=True, blank=True)
     def __str__(self):
         return self.name
+    @property
+    def image_tag(self):
+        try:
+            return mark_safe('<img src="%s" />' % self.image.url)
+        except:
+            return 'None'
+
 
     class Meta:
-        # verbose_name = 'Consumer'
         verbose_name_plural = 'Categories'
         ordering = ['name']
 
-class Product(models.Model):
+class SubCategory(models.Model):
     name = models.CharField(max_length=250, default='')
-    image = models.ImageField(upload_to='product', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL,  null=True, blank=True)
 
     def __str__(self):
+        return self.name
+
+
+    class Meta:
+        verbose_name_plural = 'SubCategories'
+        ordering = ['category']
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=250, default='')
+    image = ImageCropField(upload_to='product', null=True, blank=True)
+    cropping = ImageRatioField('image', '100x100')  # поле для хранения размера обрезки изображения
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,  null=True, blank=True)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL,  null=True, blank=True)
+
+    @property
+    def get_small_image(self):
+        return mark_safe('<img src="%s" />' % get_thumbnailer(self.image).get_thumbnail({
+            'size': (100, 100),
+            'box': self.cropping,
+            'crop': 'smart',
+        }).url)
+
+    def __str__(self):
         return '%s (%s)' % (self.name, self.category)
+
+    @property
+    def image_tag(self):
+        try:
+            return mark_safe('<img src="%s" />' % self.image.url)
+        except:
+            return 'None'
 
     class Meta:
         ordering = ['category']

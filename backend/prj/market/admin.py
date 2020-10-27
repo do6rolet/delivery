@@ -16,11 +16,15 @@ class ConsumerAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name', 'image_tag']
+
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category']
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category']
+    list_display = ['name', 'category', 'get_small_image']
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):

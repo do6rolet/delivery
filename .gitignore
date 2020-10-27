@@ -7,3 +7,4 @@ package-lock.json
 .vscode
 .idea
 backend/prj/db.sqlite3
+media/

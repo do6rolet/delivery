@@ -1,0 +1,22 @@
+1. Создание проекта:
+- ng new ng-prj
+- cd ng-prj
+- ng serve
+2. Angular/Flex-layout  https://github.com/angular/flex-layout
+- npm i -s @angular/flex-layout @angular/cdk
+
+Next, you'll need to import the Layout module in your app's module.
+
+app.module.ts
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+...
+
+@NgModule({
+    ...
+    imports: [ FlexLayoutModule ],
+    ...
+});
+
+3. Angular Materials https://material.angular.io/guide/getting-started
+ng add @angular/material

@@ -155,3 +155,52 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'get_small_image']
 
 14. для запуска импорта использовать ./manage.py load_fm_inet
+
+15. Добавление фильтрации:
+https://django-filter.readthedocs.io/en/stable/guide/rest_framework.html
+#settings.py
+
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    'django_filters',
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        ...
+    ),
+}
+
+
+#filters.py
+from django_filters import rest_framework as filters
+from market.models import Product
+
+
+class ProductFilter(filters.FilterSet):
+    category = filters.NumberFilter()
+    subcategory = filters.NumberFilter()
+    searchkey = filters.CharFilter(field_name='name', lookup_expr='icontains')
+
+    class Meta:
+        model = Product
+        fields = ['category', 'subcategory', 'searchkey']
+
+
+#views/product.py:
+
+class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'category', 'subcategory', 'get_small_image_url']
+
+class ProductListView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filterset_class = ProductFilter
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+

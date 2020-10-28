@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 from image_cropping.fields import ImageRatioField, ImageCropField
 from easy_thumbnails.files import get_thumbnailer
 
+from prj.settings import BASE_URL
 
 class Provider(User):
     name = models.CharField(max_length=250, default='')
@@ -73,11 +74,15 @@ class Product(models.Model):
 
     @property
     def get_small_image(self):
-        return mark_safe('<img src="%s" />' % get_thumbnailer(self.image).get_thumbnail({
+        return mark_safe('<img src="%s" />' % self.get_small_image_url)
+
+    @property
+    def get_small_image_url(self):
+        return BASE_URL + get_thumbnailer(self.image).get_thumbnail({
             'size': (100, 100),
             'box': self.cropping,
             'crop': 'smart',
-        }).url)
+        }).url
 
     def __str__(self):
         return '%s (%s)' % (self.name, self.category)

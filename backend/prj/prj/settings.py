@@ -134,7 +134,7 @@ ASGI_APPLICATION = "market.ws_route_app.application"
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 50,
     'DEFAULT_FILTER_BACKENDS': (
     'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -150,4 +150,4 @@ DATA_DIR = os.path.join(BASE_DIR, '../init_data')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-BASE_URL = 'http://localhost:8787'
+BACKEND_URL = 'http://localhost:8787'

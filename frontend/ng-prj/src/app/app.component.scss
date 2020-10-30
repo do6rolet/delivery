@@ -19,4 +19,23 @@
 
 }
 
+.product-card {
+  margin-top: 10px;
+  height: 140px;
+}
 
+mat-card-title {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px !important;
+}
+
+mat-card-subtitle {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px !important;
+}

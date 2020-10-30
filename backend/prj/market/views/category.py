@@ -3,14 +3,19 @@ from rest_framework import serializers  # описывают входные и �
 from rest_framework import viewsets  # содержит generics
 from rest_framework import permissions  # управляет правами доступа к endpoints
 
-from market.models import Category
+from market.models import Category, SubCategory
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'image_url']
 
+
+class SubCategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {MatButtonModule} from '@angular/material/button';
     FlexLayoutModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatCardModule,
     FlexLayoutModule.withConfig({ssrObserveBreakpoints: ['xs', 'lt-md']}),
   ],
   providers: [],

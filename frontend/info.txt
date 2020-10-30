@@ -102,3 +102,15 @@ export class AppComponent {
         console.log(this.productList)
     });
   }
+
+
+11. Добавляем @angular/material/card';
+https://material.angular.io/components/card/api
+# app.modules.ts
+import {MatCardModule} from '@angular/material/card';
+
+ imports: [
+    MatCardModule,
+    ]
+
+12. используем mat-cart для вывода карточек товара

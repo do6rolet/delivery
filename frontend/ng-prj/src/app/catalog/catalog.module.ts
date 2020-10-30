@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {ApiService} from "./../api.service";
 
 const routes: Routes = [
   {path: '', component: ListComponent}
@@ -20,6 +21,9 @@ const routes: Routes = [
     MatButtonModule,
     MatCardModule,
     FlexLayoutModule,
+  ],
+  providers: [
+    ApiService
   ]
 })
 export class CatalogModule { }

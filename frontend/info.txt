@@ -114,3 +114,66 @@ import {MatCardModule} from '@angular/material/card';
     ]
 
 12. используем mat-cart для вывода карточек товара
+
+13. Routing
+ - ng g m catalog // generate module
+ - ng g c catalog/list // generate component
+ - ng g m basket
+ - ng g c basket/list
+ - ng g m profile
+ - ng g c profile/edit
+ Маршруты прописываются в app-routing.module.ts
+ const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'catalog',
+    pathMatch: 'full',
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+  },
+
+14. Необходимом добавить роутинг к компонентам в  файл модуля
+#profile.module.ts
+#basket.module.ts
+#catalog.module.ts
+
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {path: '', component: EditComponent}
+
+];
+
+
+@NgModule({
+  declarations: [EditComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+  ]
+
+  // остальные по аналогии
+
+15. добавляем ссылки в app.component.html
+
+<button mat-raised-button color="primary" [routerLink]="'catalog'">Catalog</button>
+<button mat-raised-button color="accent" [routerLink]="'basket'">Basket</button>
+<button mat-raised-button color="warn" [routerLink]="'profile'">Profile</button>
+
+16. добавляем редирект на 'catalog' с корневой страницы
+
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'catalog',
+    pathMatch: 'full',
+  },
+
+ 17. переносим вывод католога товара с app.component.html/ts в catalog/list.component.html/ts
+не забываем импортировать в catalog.module.ts
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
+

@@ -15,4 +15,6 @@ requests==2.24.0
 bs4==0.0.1
 django-image-cropping==1.5.0
 easy-thumbnails==2.7
+django-cors-headers==3.5.0
+
 

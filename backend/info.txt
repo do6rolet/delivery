@@ -2,7 +2,6 @@
 
 1. pip install -r requirements.txt
 2. run server:
-cd backend
 ./bin/run  # chmod +x ./bin/run
 
 
@@ -204,3 +203,5 @@ class ProductListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+16. Need to install django-cors for allow connection between frontend and backend:
+ https://pypi.org/project/django-cors-headers/

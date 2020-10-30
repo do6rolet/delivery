@@ -13,14 +13,26 @@
 <div fxLayout="column" id="app-content">
   <div id="app-header" fxFlex="80px" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
     <img src="/assets/images/babr.png" width="60px" alt="">
-    <span id="logo-name">ALAGUERRE</span>
+    <span id="logo-name">ALAGUERRE {{ name }}</span>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end start" fxFlex="100">
-     <button mat-raised-button color="primary">Primary</button>
-    <button mat-raised-button color="accent">Accent</button>
-    <button mat-raised-button color="warn">Warn</button>
+      <button mat-raised-button color="primary" (click)="getProductList()">Get products</button>
+      <button mat-raised-button color="accent">Accent</button>
+      <button mat-raised-button color="warn">Warn</button>
     </div>
-   </div>
-  <div id="app-center" fxFlex="100">center</div>
+  </div>
+  <div id="app-center"
+       fxFlex="100"
+       fxLayout="row wrap"
+       fxLayoutGap="10px"
+       fxLayoutAlign="start start">
+
+    <div *ngFor="let product of productList.results" fxLayout="row">
+      <div style="width: 100px;">
+        <img src="{{ product.get_small_image_url }}">
+      </div>
+      <div style="width: 100px; text-align: center;">{{ product.name }}</div>
+    </div>
+  </div>
   <div id="app-footer" fxFlex="40px">footer</div>
 </div>
 

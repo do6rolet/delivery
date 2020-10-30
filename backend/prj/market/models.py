@@ -78,11 +78,14 @@ class Product(models.Model):
 
     @property
     def get_small_image_url(self):
-        return BASE_URL + get_thumbnailer(self.image).get_thumbnail({
-            'size': (100, 100),
-            'box': self.cropping,
-            'crop': 'smart',
-        }).url
+        try:
+            return BASE_URL + get_thumbnailer(self.image).get_thumbnail({
+                'size': (100, 100),
+                'box': self.cropping,
+                'crop': 'smart',
+            }).url
+        except:
+            return BASE_URL+"Noimage.png"
 
     def __str__(self):
         return '%s (%s)' % (self.name, self.category)

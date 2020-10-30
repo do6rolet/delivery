@@ -20,3 +20,85 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 3. Angular Materials https://material.angular.io/guide/getting-started
 ng add @angular/material
+
+4. SSR (server side rendering)  https://angular.io/guide/universal
+ - run ssr:
+./bin/ssr  # chmod +x ./bin/run
+
+5. Angular HTTP Client: https://angular.io/guide/http
+
+#app/app.module.ts
+
+
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    // import HttpClientModule after BrowserModule.
+    HttpClientModule,
+  ],
+
+#app.components.ts
+
+import { HttpClient } from '@angular/common/http';
+
+export class AppComponent {
+  title = 'ng-prj';
+  name = 'Do6ro';
+  constructor(private http: HttpClient) { }
+}
+
+6. Need to install django-cors for allow connection between frontend and backend:
+ https://pypi.org/project/django-cors-headers/
+
+
+7. Прописываем в environment.ts адрес нашего backend:
+export const environment = {
+  production: false,
+  backendUrl: 'http://localhost:8787/'
+};
+#app.components.ts
+
+import { environment } from "../environments/environment";
+
+getProductList(){
+   console.log('Server request');
+   this.http.get(`${environment.backendUrl}v1/generic/product_list`).subscribe((res: any) => {
+       this.productList = res;
+       console.log(this.productList)
+   });
+  }
+
+
+
+9. Для формирования npm run build:ssr необходимо так же прописать backendUrl в environment.prod.ts
+
+10. Получаем запрос от сервера и передаем на клиент:
+ # app.components.ts
+
+
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // используем для запроса на сервер
+import { environment } from "../environments/environment"; // backendUrl
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+  title = 'ng-prj';
+  name = 'Do6ro';
+  productList = { results: []};
+  constructor(private http: HttpClient) {
+    this.getProductList();
+  }
+
+  getProductList(){
+    console.log('Server request');
+    this.http.get(`${environment.backendUrl}v1/generic/product_list`).subscribe((res: any) => {
+        this.productList = res;
+        console.log(this.productList)
+    });
+  }

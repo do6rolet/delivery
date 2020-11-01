@@ -205,3 +205,45 @@ class ProductListView(ListAPIView):
 
 16. Need to install django-cors for allow connection between frontend and backend:
  https://pypi.org/project/django-cors-headers/
+
+17. Формируем новый маршрут в API category_list (вынесли сериализаторы в отдельные файлы).
+
+#market/serializers/category.py
+
+from rest_framework import serializers  # описывают входные и выходные данные, их структуру, типы полей
+from market.models import Category, SubCategory
+from market.serializers.subcategory import SubCategorySerializer
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+
+    subcategory = serializers.SerializerMethodField()  # вывод подкатегорий
+
+    def get_subcategory(self, obj):
+
+        out = []
+        for item in SubCategory.objects.filter(category=obj):
+            out.append(SubCategorySerializer(item).data)
+        return out
+
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'image_url', 'subcategory']
+
+
+
+# views/category.py
+
+class CategoryListView(ListAPIView):
+    serializer_class = CategorySerializer
+    pagination_class = None  # отключаем пагинатор
+
+    def get_queryset(self):
+        return Category.objects.all().order_by('-id')
+
+
+
+
+ # urls.py :
+ urlpatterns = [
+    path('category_list', CategoryListView.as_view()),

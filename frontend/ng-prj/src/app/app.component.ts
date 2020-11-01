@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {ApiService} from "./api.service";
 
 
 @Component({
@@ -8,11 +9,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ng-prj';
+  categories = [];
 
-  constructor() {
+  constructor(private apiService: ApiService) {
+
+    this.apiService.getCategoryList().subscribe((res: any) => {
+      this.categories = res;
+    });
   }
-
-
 }
 
 

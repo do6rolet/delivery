@@ -245,3 +245,118 @@ export class ListComponent implements OnInit {
 
   }
 }
+
+
+19. Добавляем меню категории со вложенным меню подкатегории. Для этого на бэкенде прописываем в API новый маршрут
+category_list. На фронте же:
+- api.service.ts:
+
+export class ApiService {
+  constructor(private http: HttpClient) { }
++  getCategoryList() {
++    return  this.http.get(`${environment.backendUrl}v1/generic/category_list`);
++  }
+
+- app.components.ts
+export class AppComponent {
+  title = 'ng-prj';
++  categories = [];
++  constructor(private apiService: ApiService) {
++    this.apiService.getCategoryList().subscribe((res: any) => {
++      this.categories = res;
++    });
++  }
+}
+
+- app.module.ts
+
+import {MatMenuModule} from '@angular/material/menu'; // добавляем меню
+    ...
+  imports: [
+    ...
+    MatMenuModule,
+  ],
+
+- app.component.html
+
+      <mat-menu #category="matMenu">
+          <ng-container *ngFor="let item of categories" >
+            <button [matMenuTriggerFor]="subitem" mat-menu-item>
+              {{ item.name }}
+            </button>
+            <mat-menu #subitem="matMenu">
+              <button *ngFor="let subitem of item.subcategory" mat-menu-item>
+                 {{ subitem.name }}
+              </button>
+            </mat-menu>
+          </ng-container>
+        </mat-menu>
+
+20. Добавляем ссылки на наши категории и подкатегории.
+-- catalog.module.ts
+const routes: Routes = [
+  {path: '', component: ListComponent},
++  {path: 'cat/:catId', component: ListComponent},
++  {path: 'subcat/:subCatId', component:ListComponent},
+
+-- app.component.html
+
+        <ng-container *ngFor="let item of categories" >
+            <button
+           ++ [routerLink]="['catalog/cat', item.id]"
+              [matMenuTriggerFor]="subitem" mat-menu-item>
+              {{ item.name }}
+            </button>
+            <mat-menu #subitem="matMenu">
+              <button
+             ++ [routerLink]="['catalog/subcat', subitem.id]"
+                *ngFor="let subitem of item.subcategory" mat-menu-item>
+                 {{ subitem.name }}
+              </button>
+            </mat-menu>
+          </ng-container>
+
+-- list.components.ts
+++ import {ActivatedRoute} from "@angular/router";
+
+@Component({
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
+})
+export class ListComponent implements OnInit {
+
+  productList = {results: []};
+
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService,
+++  private route: ActivatedRoute
+  ) {
+++    this.getProductList({});
+
+++    this.route.params.subscribe(params => {
+++      if (params.hasOwnProperty('catId')){
+++          this.getProductList({cat:params.catId});
+++          }
+++      else if (params.hasOwnProperty('subCatId')){
+++          this.getProductList({subcat:params.subCatId});
+++          }
+++      else {
+++          this.getProductList({})
+            }
+        });
+    }
+
+-- api.service.ts
+
+  getProductList(pk) {
+    if (pk.hasOwnProperty('cat')) {
+      return this.http.get(`${environment.backendUrl}v1/generic/product_list?category=${pk.cat}`);
+    }
+    if (pk.hasOwnProperty('subcat')) {
+      return this.http.get(`${environment.backendUrl}v1/generic/product_list?subcategory=${pk.subcat}`);
+    }
+
+    return this.http.get(`${environment.backendUrl}v1/generic/product_list`);
+  }

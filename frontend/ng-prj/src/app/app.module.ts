@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -15,13 +16,14 @@ import {MatCardModule} from '@angular/material/card';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    FlexLayoutModule.withConfig({ssrObserveBreakpoints: ['xs', 'lt-md']}),
     HttpClientModule,
     AppRoutingModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatCardModule,
-    FlexLayoutModule.withConfig({ssrObserveBreakpoints: ['xs', 'lt-md']}),
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
